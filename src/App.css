@@ -8,6 +8,11 @@
     margin: auto;
 }
 
+.error {
+    color: red;
+    margin-bottom: 1rem;
+}
+
 /* -----------------BUTTON*/
 button {
     border: 2px solid #fff;

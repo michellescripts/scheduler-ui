@@ -8,56 +8,73 @@ class App extends React.Component {
             thursdayShifts: [],
             fridayShifts: [],
             assignmentsWithShifts: [],
-            showModal: true,
+            showSignUp: true,
             name: "",
-            email: ""
+            email: "",
+            isRegistered: true
         }
     }
 
-    componentDidMount = async () => {
+    componentDidMount() {
         this.fetchShifts()
         this.fetchAssignmentsWithShifts()
     }
 
     render() {
-        const {thursdayShifts, fridayShifts, showModal} = this.state
+        const {thursdayShifts, fridayShifts, showSignUp, isRegistered} = this.state
 
         return (
             <div className="page">
 
                 <h1>Develop Denver 2019</h1>
                 <h2>Volunteer Sign up</h2>
-                {showModal ?
+                {showSignUp ?
                     <React.Fragment>
                         <h3>In order to sign up for shifts, please enter your infomation:</h3>
 
                         <form>
                             <label> Name:
                                 <input
-                                    onChange={(event) => this.setState({name: event.target.value})}
+                                    onChange={(event) => this.setState({name: event.target.value.toLowerCase()})}
                                 />
                             </label>
                             <label> Email:
                                 <input
-                                    onChange={(event) => this.setState({email: event.target.value})}
+                                    onChange={(event) => this.setState({email: event.target.value.toLowerCase()})}
                                 />
                             </label>
-                            <button onClick={this.submit}>Submit</button>
+                            {isRegistered ? null :
+                                <React.Fragment>
+                                <div className="error">
+                                    This email address is not registered. Please enter the email you used when filling out
+                                    the volunteer availablity and contact information form.
+                                </div>
+                                <div className="error">
+                                    Contact @michelle on
+                                    denverdevs or michelle.bergquist@developdenver.org for help.
+                                </div>
+                                </React.Fragment>
+                            }
+                            <button onClick={(e) => this.submit(e)}>Submit</button>
                         </form>
                     </React.Fragment>
                     : null}
 
 
-                {!showModal ?
+                {!showSignUp ?
                     <React.Fragment>
                         <h1>Thursday August 15th</h1>
                         <table>
+                            <tbody>
                             {this.getRows(thursdayShifts)}
+                            </tbody>
                         </table>
 
                         <h1>Friday August 16th</h1>
                         <table>
+                            <tbody>
                             {this.getRows(fridayShifts)}
+                            </tbody>
                         </table>
                     </React.Fragment>
                     : null}
@@ -68,31 +85,37 @@ class App extends React.Component {
     }
 
     getRows(shifts) {
-        const {assignmentsWithShifts} = this.state
-
-        return shifts.map(shift => {
+        return shifts.map((shift, i) => {
             return (
-                <tr>
-                    <td>{this.formatTime(shift.shift.hourStart)}</td>
-                    <td><b>{shift.available}</b> available</td>
-                    <td>
-                        {this.getButton(shift)}
-                    </td>
+                <tr key={i}>
+                    <td>{App.formatTime(shift.shift.hourStart)}</td>
+                    <td>{shift.available} available</td>
+                    <td>{this.getButton(shift)}</td>
                 </tr>
             )
         })
     }
 
     submit = async (e) => {
-        const {showModal, name, email} = this.state
+        e.preventDefault()
+        const {name, email, showSignUp} = this.state
 
         if (name !== "" && email !== "") {
-            this.fetchAssignmentsWithShifts()
+            App.isVolunteer(email).then(r => {
+                if (r) {
+                    this.fetchAssignmentsWithShifts()
+                    this.setState({showSignUp: !showSignUp})
 
-            this.setState({
-                showModal: !showModal
+                } else {
+                    this.setState({isRegistered: false})
+                }
             })
         }
+    }
+
+    static async isVolunteer(email) {
+        const response = await fetch(`/volunteer?email=${encodeURIComponent(email)}`)
+        return await response.json()
     }
 
     fetchShifts = async () => {
@@ -122,23 +145,25 @@ class App extends React.Component {
         let assignedShift = ""
 
         assignmentsWithShifts.forEach(assignmentAndShift => {
-            if (assignmentAndShift.assignment.shiftId == shift.shift.primaryId) {
+            if (assignmentAndShift.assignment.shiftId === shift.shift.primaryId) {
                 hasThisShift = true
                 assignedShift = assignmentAndShift.assignment.primaryId
             }
         })
 
         if (hasThisShift && assignedShift) {
-            return <button onClick={() => this.removeSignUp(assignedShift)}>Un-sign Up</button>
-        } else if (shift.available <= 0 && hasThisShift == false) {
-            return <div className='noneLeft'>all full 🙏</div>
+            return <button onClick={(e) => this.removeSignUp(e, assignedShift)}>Cancel</button>
+        } else if (shift.available <= 0 && hasThisShift === false) {
+            return <div className='noneLeft'>all full <span role="img" aria-label="thank you pray emoji">🙏</span></div>
         } else {
-            return <button onClick={() => this.signUp(shift.shift.primaryId)}>Sign Up</button>
+            return <button onClick={(e) => this.signUp(e, shift.shift.primaryId)}>Sign Up</button>
         }
 
     }
 
-    signUp = async (primaryId) => {
+    signUp = async (e, primaryId) => {
+        e.preventDefault()
+
         const {name, email} = this.state
 
         if (name !== "" && email !== "") {
@@ -146,39 +171,32 @@ class App extends React.Component {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email: email, shiftId: primaryId})
-
             })
             this.fetchShifts()
             this.fetchAssignmentsWithShifts()
-        } else {
-            this.toggleModal()
         }
     }
 
 
-    removeSignUp = async (primaryId) => {
-        await fetch(`/assignment/${primaryId}`, {
-            method: "DELETE"
-        })
+    removeSignUp = async (e, primaryId) => {
+        e.preventDefault()
+
+        await fetch(`/assignment/${primaryId}`, {method: "DELETE"})
         this.fetchShifts()
         this.fetchAssignmentsWithShifts()
     }
 
-    formatTime(hourStart) {
-        let hourEnd = hourStart+1
+    static formatTime(hourStart) {
+        let hourEnd = hourStart + 1
+
         if (hourStart > 12) {
-            hourStart = hourStart-12
+            hourStart = hourStart - 12
         }
-
         if (hourEnd > 12) {
-            hourEnd = hourEnd-12
+            hourEnd = hourEnd - 12
         }
-
-
-
 
         return `${hourStart}:00 - ${hourEnd}:00`
-
     }
 }
 
