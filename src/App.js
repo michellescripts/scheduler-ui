@@ -114,12 +114,12 @@ class App extends React.Component {
     }
 
     static async isVolunteer(email) {
-        const response = await fetch(`/volunteer?email=${encodeURIComponent(email)}`)
+        const response = await fetch(`/api/volunteer?email=${encodeURIComponent(email)}`)
         return await response.json()
     }
 
     fetchShifts = async () => {
-        const response = await fetch("/shifts")
+        const response = await fetch("/api/shifts")
         const shifts = await response.json()
 
         this.setState({
@@ -133,7 +133,7 @@ class App extends React.Component {
 
         if (email) {
             const encoded = encodeURIComponent(email)
-            const response = await fetch(`/assignment?email=${encoded}`)
+            const response = await fetch(`/api/assignment?email=${encoded}`)
             const assignments = await response.json()
             this.setState({assignmentsWithShifts: assignments})
         }
@@ -167,7 +167,7 @@ class App extends React.Component {
         const {name, email} = this.state
 
         if (name !== "" && email !== "") {
-            await fetch("/assignment", {
+            await fetch("/api/assignment", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email: email, shiftId: primaryId})
@@ -181,7 +181,7 @@ class App extends React.Component {
     removeSignUp = async (e, primaryId) => {
         e.preventDefault()
 
-        await fetch(`/assignment/${primaryId}`, {method: "DELETE"})
+        await fetch(`/api/assignment/${primaryId}`, {method: "DELETE"})
         this.fetchShifts()
         this.fetchAssignmentsWithShifts()
     }

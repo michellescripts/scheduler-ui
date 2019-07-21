@@ -1,0 +1,7 @@
+---
+applications:
+  - name: volunteer
+    memory: 512M
+    path: build
+    buildpacks:
+    - staticfile_buildpack
