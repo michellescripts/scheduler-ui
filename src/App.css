@@ -42,6 +42,12 @@ button:focus {
     line-height: 2.7rem;
 }
 
+@media (min-width: 600px) {
+  button {
+      width: 50%;
+  }
+}
+
 /* -----------------INPUT*/
 label {
     display: flex;
