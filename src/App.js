@@ -5,6 +5,10 @@ import { useAuth0 } from "./react-auth0-wrapper";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Profile from "./components/Profile";
 import PrivateRoute from "./components/PrivateRoute";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheckSquare, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCheckSquare, faTimes, faBars)
 
 function App() {
   const { loading } = useAuth0();
