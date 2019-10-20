@@ -4,4 +4,4 @@ applications:
     memory: 512M
     path: build
     buildpacks:
-    - staticfile_buildpack
+      - staticfile_buildpack

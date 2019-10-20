@@ -1,99 +1,100 @@
-html, body {
-    background-color: black;
-    color: white;
+html,
+body {
+  background-color: black;
+  color: white;
 }
 
 .page {
-    max-width: 30rem;
-    margin: auto;
+  max-width: 30rem;
+  margin: auto;
 }
 
 .error {
-    color: red;
-    margin-bottom: 1rem;
+  color: red;
+  margin-bottom: 1rem;
 }
 
 /* -----------------BUTTON*/
 button {
-    border: 2px solid #fff;
-    font-family: DVLP;
-    font-size: 1.8rem;
-    line-height: 1.5;
-    text-decoration: none;
-    text-align: center;
-    width: 100%;
-    background: none;
-    padding: 10px;
+  border: 2px solid #fff;
+  font-family: DVLP;
+  font-size: 1.8rem;
+  line-height: 1.5;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  background: none;
+  padding: 10px;
 }
 
 button:hover {
-    color: #3dae2b;
-    border: 2px solid #3dae2b;
+  color: #3dae2b;
+  border: 2px solid #3dae2b;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 .noneLeft {
-    font-family: DVLP;
-    color: #3dae2b;
-    height: 2.7rem;
-    line-height: 2.7rem;
+  font-family: DVLP;
+  color: #3dae2b;
+  height: 2.7rem;
+  line-height: 2.7rem;
 }
 
 @media (min-width: 600px) {
   button {
-      width: 50%;
+    width: 50%;
   }
 }
 
 /* -----------------INPUT*/
 label {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
 }
 
 input {
-    border: 2px solid #fff;
-    padding: 1rem;
-    margin-bottom: 0.5rem;
+  border: 2px solid #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 /* -----------------TABLE*/
 table {
-    border-collapse: collapse;
-    margin: auto;
+  border-collapse: collapse;
+  margin: auto;
 }
 
 table td {
-    border: 1px solid white;
-    width: 10rem;
-    text-align: center;
+  border: 1px solid white;
+  width: 10rem;
+  text-align: center;
 }
 
 table tr:first-child td {
-    border-top: 0;
+  border-top: 0;
 }
 
 table tr td:first-child {
-    border-left: 0;
+  border-left: 0;
 }
 
 table tr:last-child td {
-    border-bottom: 0;
+  border-bottom: 0;
 }
 
 table tr td:last-child {
-    border-right: 0;
+  border-right: 0;
 }
 
 table button {
-    margin: 2px;
-    font-size: 1rem;
+  margin: 2px;
+  font-size: 1rem;
 }

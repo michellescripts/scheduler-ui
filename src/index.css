@@ -1,11 +1,12 @@
 @font-face {
-  font-family: 'DVLP';
-  src: local('DVLP'), url(./fonts/DVLPOCR.b49368a9.otf) format('opentype');
+  font-family: "DVLP";
+  src: local("DVLP"), url(./fonts/DVLPOCR.b49368a9.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'TSTAR';
-  src: local('TSTAR'), url(./fonts/TSTAR-PRO-Regular.92358a49.otf) format('opentype');
+  font-family: "TSTAR";
+  src: local("TSTAR"),
+    url(./fonts/TSTAR-PRO-Regular.92358a49.otf) format("opentype");
 }
 
 * {
@@ -16,7 +17,9 @@ body {
   font-family: TSTAR;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: DVLP;
 }
 
@@ -31,4 +34,3 @@ h2 {
 h3 {
   font-size: 1.1rem;
 }
-
